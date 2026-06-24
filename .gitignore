@@ -1,0 +1,143 @@
+# ============================================
+# NEBULA DRIFTER - .gitignore
+# ============================================
+
+# --------------------------------------------
+# Node.js (general)
+# --------------------------------------------
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# --------------------------------------------
+# Entornos y variables de entorno
+# --------------------------------------------
+.env
+.env.local
+.env.*.local
+.env.production
+.env.development
+
+# --------------------------------------------
+# Editores de código
+# --------------------------------------------
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+.vscode/
+.idea/
+*.iml
+
+# --------------------------------------------
+# Sistema operativo
+# --------------------------------------------
+.DS_Store
+Thumbs.db
+Desktop.ini
+ehthumbs.db
+*.tmp
+
+# --------------------------------------------
+# Builds y distribución
+# --------------------------------------------
+dist/
+build/
+*.min.js
+*.min.css
+*.min.map
+*.map
+
+# --------------------------------------------
+# Logs
+# --------------------------------------------
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# --------------------------------------------
+# Base de datos (si usas local)
+# --------------------------------------------
+data/
+*.db
+*.sqlite
+*.sqlite3
+
+# --------------------------------------------
+# Configuraciones locales
+# --------------------------------------------
+*.local
+*.private
+*.secret
+
+# --------------------------------------------
+# Archivos temporales
+# --------------------------------------------
+tmp/
+temp/
+*.tmp
+*.temp
+
+# --------------------------------------------
+# Cliente (frontend)
+# --------------------------------------------
+# Assets generados
+client/public/assets/generated/
+client/public/assets/sprites/*-generated.png
+
+# --------------------------------------------
+# Servidor (backend)
+# --------------------------------------------
+# Uploads temporales
+server/uploads/
+server/temp/
+server/public/
+server/logs/
+
+# --------------------------------------------
+# Docker (si usas)
+# --------------------------------------------
+docker/data/
+docker/volumes/
+
+# --------------------------------------------
+# Tests y cobertura
+# --------------------------------------------
+coverage/
+.nyc_output/
+test-results/
+
+# --------------------------------------------
+# Archivos específicos de Windows
+# --------------------------------------------
+# Windows image file caches
+Thumbs.db
+ehthumbs.db
+
+# Folder config file
+Desktop.ini
+
+# Recycle Bin used on file shares
+$RECYCLE.BIN/
+
+# --------------------------------------------
+# Archivos específicos de macOS
+# --------------------------------------------
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# --------------------------------------------
+# Archivos específicos de Linux
+# --------------------------------------------
+*~
+.*.swp
+.*.swo

@@ -1,0 +1,16 @@
+{
+  "name": "nebula-drifter-client",
+  "version": "1.0.0",
+  "description": "Frontend del juego Nebula Drifter",
+  "main": "src/app.js",
+  "scripts": {
+    "start": "npx serve public",
+    "dev": "npx serve public"
+  },
+  "keywords": ["game", "space", "canvas"],
+  "author": "TuNombre",
+  "license": "MIT",
+  "devDependencies": {
+    "serve": "^14.0.0"
+  }
+}
