@@ -15,6 +15,7 @@
     let gameRunning = false;
     let ship = null;
     let fragments = [];
+    let creatures = [];
     let keys = {};
     let animationId = null;
     let lastTime = 0;
@@ -35,6 +36,12 @@
             count: 15,
             minSize: 8,
             maxSize: 16
+        },
+        creature: {
+            count: 5,
+            speed: 1.2,
+            aggroRadius: 200,
+            damage: 1
         }
     };
     
@@ -61,6 +68,17 @@
                 CONFIG.fragment
             );
             fragments.push(fragment);
+        }
+        
+        // Crear criaturas
+        creatures = [];
+        for (let i = 0; i < CONFIG.creature.count; i++) {
+            const creature = new Creature(
+                Math.random() * (canvas.width - 80) + 40,
+                Math.random() * (canvas.height - 80) + 40,
+                CONFIG.creature
+            );
+            creatures.push(creature);
         }
         
         // Reiniciar puntuación
@@ -106,6 +124,11 @@
             fragment.update(dt);
         }
         
+        // Actualizar criaturas (pasar posición del jugador)
+        for (const creature of creatures) {
+            creature.update(ship.x, ship.y, dt);
+        }
+        
         // Colisiones nave - fragmentos
         for (let i = fragments.length - 1; i >= 0; i--) {
             const fragment = fragments[i];
@@ -117,6 +140,27 @@
                 fragmentCount++;
                 updateHUD();
                 console.log(`💎 Fragmento recogido! +${points} puntos`);
+            }
+        }
+        
+        // Colisiones nave - criaturas
+        for (const creature of creatures) {
+            if (!creature.active) continue;
+            if (creature.checkCollision(ship.x, ship.y, ship.size)) {
+                // Dañar al jugador
+                ship.takeDamage(CONFIG.creature.damage);
+                updateHUD();
+                console.log(`💥 Daño! Vida: ${ship.health}`);
+                
+                // Teletransportar criatura (para evitar daño continuo)
+                creature.x = Math.random() * (canvas.width - 80) + 40;
+                creature.y = Math.random() * (canvas.height - 80) + 40;
+                
+                // Game Over si la vida llega a 0
+                if (ship.health <= 0) {
+                    gameOver();
+                    return;
+                }
             }
         }
         
@@ -136,6 +180,11 @@
             fragment.draw(ctx);
         }
         
+        // Dibujar criaturas
+        for (const creature of creatures) {
+            creature.draw(ctx);
+        }
+        
         // Dibujar nave
         if (ship) {
             ship.draw(ctx);
@@ -149,6 +198,7 @@
         ctx.fillText(`Vida: ${ship.health}`, 10, 60);
         ctx.fillText(`Fragmentos: ${fragmentCount}`, 10, 80);
         ctx.fillText(`Puntuación: ${score}`, 10, 100);
+        ctx.fillText(`Criaturas vivas: ${creatures.filter(c => c.active).length}`, 10, 120);
     }
     
     function drawStars() {
@@ -238,5 +288,5 @@
     
     console.log('✅ Nebula Drifter cargado! Listo para jugar.');
     console.log('🎮 Controles: WASD para mover, flechas para rotar');
-    console.log('💎 Recolecta los fragmentos dorados para sumar puntos!');
+    console.log('💎 Recolecta fragmentos, esquiva a las criaturas!');
 })();
