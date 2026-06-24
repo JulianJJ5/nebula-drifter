@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>🌌 Nebula Drifter</title>
+    
+    <!-- Fuentes -->
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet" />
+    
+    <!-- Estilos -->
+    <link rel="stylesheet" href="src/ui/styles.css" />
+</head>
+<body>
+    <!-- Contenedor del juego -->
+    <div id="game-container">
+        <!-- Canvas para el juego -->
+        <canvas id="gameCanvas" width="900" height="600"></canvas>
+        
+        <!-- HUD (Interfaz superpuesta) -->
+        <div id="hud" class="hud hidden">
+            <div class="hud-left">
+                <div class="health-bar">
+                    <span>❤️</span>
+                    <div class="health-fill" id="healthFill"></div>
+                </div>
+                <div class="fragment-counter">
+                    <span>💎</span>
+                    <span id="fragmentCount">0</span>
+                </div>
+            </div>
+            <div class="hud-right">
+                <div class="zone-indicator">
+                    <span>Zona</span>
+                    <span id="zoneName">El Velo de Polvo</span>
+                </div>
+                <div class="score-display">
+                    <span>🏆</span>
+                    <span id="scoreDisplay">0</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Menú principal -->
+        <div id="mainMenu" class="menu-overlay">
+            <div class="menu-box">
+                <h1>🌌 NEBULA DRIFTER</h1>
+                <p class="subtitle">Explora. Recolecta. Sobrevive.</p>
+                <button id="startGameBtn" class="btn-primary">🚀 Iniciar Aventura</button>
+                <button id="leaderboardBtn" class="btn-secondary">🏆 Tabla de Líderes</button>
+                <div class="controls-info">
+                    <p>WASD · Movimiento</p>
+                    <p>ESPACIO · Pulso de energía</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Game Over -->
+        <div id="gameOver" class="menu-overlay hidden">
+            <div class="menu-box">
+                <h1>💀 Has caído</h1>
+                <p>Fragmentos recolectados: <span id="finalFragments">0</span></p>
+                <p>Puntuación final: <span id="finalScore">0</span></p>
+                <button id="retryBtn" class="btn-primary">🔄 Reintentar</button>
+                <button id="menuBtn" class="btn-secondary">📋 Menú Principal</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Scripts del juego (carga secuencial) -->
+    <script src="src/config/gameConfig.js"></script>
+    <script src="src/utils/math.js"></script>
+    <script src="src/core/engine.js"></script>
+    <script src="src/core/physics.js"></script>
+    <script src="src/core/particleSystem.js"></script>
+    <script src="src/entities/Ship.js"></script>
+    <script src="src/entities/Fragment.js"></script>
+    <script src="src/entities/Creature.js"></script>
+    <script src="src/entities/Storm.js"></script>
+    <script src="src/entities/Zone.js"></script>
+    <script src="src/systems/collision.js"></script>
+    <script src="src/systems/progression.js"></script>
+    <script src="src/systems/powerSystem.js"></script>
+    <script src="src/systems/scoreSystem.js"></script>
+    <script src="src/ui/HUD.js"></script>
+    <script src="src/ui/menu.js"></script>
+    <script src="src/app.js"></script>
+</body>
+</html>
