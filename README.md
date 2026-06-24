@@ -38,3 +38,39 @@ npm install
 # Instalar dependencias del servidor
 cd ../server
 npm install
+
+🎯 Roadmap
+Estructura base del proyecto
+
+Configuración de Git y GitHub
+
+Motor de juego con Canvas
+
+Nave con física de inercia
+
+Sistema de fragmentos
+
+IA de criaturas
+
+Sistema de tormentas
+
+Backend con Node.js
+
+Tabla de líderes
+
+Efectos de sonido
+
+🤝 Cómo contribuir
+Fork el proyecto
+
+Crea tu rama (git checkout -b feature/AmazingFeature)
+
+Commit tus cambios (git commit -m 'Add some AmazingFeature')
+
+Push a la rama (git push origin feature/AmazingFeature)
+
+Abre un Pull Request
+
+📄 Licencia
+Distribuido bajo licencia MIT. Ver LICENSE para más información.
+
