@@ -74,3 +74,4 @@ Abre un Pull Request
 📄 Licencia
 Distribuido bajo licencia MIT. Ver LICENSE para más información.
 
+Desarrollado con ❤️ por JulianJJ5
