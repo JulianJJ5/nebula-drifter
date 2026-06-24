@@ -16,11 +16,15 @@
     let ship = null;
     let fragments = [];
     let creatures = [];
+    let storms = [];
     let keys = {};
     let animationId = null;
     let lastTime = 0;
     let score = 0;
     let fragmentCount = 0;
+    let stormTimer = 0;
+    let stormInterval = 5000; // 5 segundos entre tormentas
+    let gameTime = 0;
     
     // Configuración
     const CONFIG = {
@@ -42,6 +46,12 @@
             speed: 1.2,
             aggroRadius: 200,
             damage: 1
+        },
+        storm: {
+            radius: 150,
+            damagePerTick: 0.8,
+            duration: 4000,
+            interval: 8000 // Tiempo entre tormentas
         }
     };
     
@@ -81,6 +91,11 @@
             creatures.push(creature);
         }
         
+        // Reiniciar tormentas
+        storms = [];
+        stormTimer = 0;
+        gameTime = 0;
+        
         // Reiniciar puntuación
         score = 0;
         fragmentCount = 0;
@@ -115,6 +130,8 @@
     function update(dt) {
         if (!ship) return;
         
+        gameTime += dt;
+        
         // Actualizar nave
         ship.update(keys, dt);
         ship.checkBoundaries(canvas.width, canvas.height);
@@ -124,10 +141,62 @@
             fragment.update(dt);
         }
         
-        // Actualizar criaturas (pasar posición del jugador)
+        // Actualizar criaturas
         for (const creature of creatures) {
             creature.update(ship.x, ship.y, dt);
         }
+        
+        // ============================================
+        // SISTEMA DE TORMENTAS
+        // ============================================
+        
+        // Crear tormentas periódicamente
+        stormTimer += dt * 1000;
+        if (stormTimer >= CONFIG.storm.interval) {
+            stormTimer = 0;
+            // Crear tormenta en una posición aleatoria (pero no encima del jugador)
+            let x, y;
+            let attempts = 0;
+            do {
+                x = Math.random() * (canvas.width - 200) + 100;
+                y = Math.random() * (canvas.height - 200) + 100;
+                attempts++;
+            } while (attempts < 20 && Math.abs(x - ship.x) < 200 && Math.abs(y - ship.y) < 200);
+            
+            const storm = new Storm(x, y, CONFIG.storm);
+            storms.push(storm);
+            console.log(`⚡ Tormenta de plasma apareció en (${Math.round(x)}, ${Math.round(y)})`);
+        }
+        
+        // Actualizar tormentas
+        for (let i = storms.length - 1; i >= 0; i--) {
+            const storm = storms[i];
+            storm.update(dt, ship.x, ship.y);
+            
+            // Verificar colisión con la nave
+            if (storm.isActive() && storm.checkCollision(ship.x, ship.y, ship.size)) {
+                // Daño continuo mientras está dentro de la tormenta
+                const damage = storm.getDamage() * dt;
+                ship.takeDamage(damage);
+                updateHUD();
+                console.log(`⚡ Daño por tormenta! Vida: ${ship.health.toFixed(1)}`);
+                
+                // Si la vida llega a 0, game over
+                if (ship.health <= 0) {
+                    gameOver();
+                    return;
+                }
+            }
+            
+            // Eliminar tormentas inactivas
+            if (!storm.isActive()) {
+                storms.splice(i, 1);
+            }
+        }
+        
+        // ============================================
+        // COLISIONES
+        // ============================================
         
         // Colisiones nave - fragmentos
         for (let i = fragments.length - 1; i >= 0; i--) {
@@ -150,9 +219,9 @@
                 // Dañar al jugador
                 ship.takeDamage(CONFIG.creature.damage);
                 updateHUD();
-                console.log(`💥 Daño! Vida: ${ship.health}`);
+                console.log(`💥 Daño por criatura! Vida: ${ship.health}`);
                 
-                // Teletransportar criatura (para evitar daño continuo)
+                // Teletransportar criatura
                 creature.x = Math.random() * (canvas.width - 80) + 40;
                 creature.y = Math.random() * (canvas.height - 80) + 40;
                 
@@ -175,6 +244,11 @@
         // Dibujar estrellas
         drawStars();
         
+        // Dibujar tormentas (detrás de todo)
+        for (const storm of storms) {
+            storm.draw(ctx);
+        }
+        
         // Dibujar fragmentos
         for (const fragment of fragments) {
             fragment.draw(ctx);
@@ -195,10 +269,11 @@
         ctx.font = '12px monospace';
         ctx.fillText(`Velocidad: ${Math.sqrt(ship.vx*ship.vx + ship.vy*ship.vy).toFixed(2)}`, 10, 20);
         ctx.fillText(`Ángulo: ${(ship.angle * 180 / Math.PI).toFixed(1)}°`, 10, 40);
-        ctx.fillText(`Vida: ${ship.health}`, 10, 60);
+        ctx.fillText(`Vida: ${ship.health.toFixed(1)}`, 10, 60);
         ctx.fillText(`Fragmentos: ${fragmentCount}`, 10, 80);
         ctx.fillText(`Puntuación: ${score}`, 10, 100);
-        ctx.fillText(`Criaturas vivas: ${creatures.filter(c => c.active).length}`, 10, 120);
+        ctx.fillText(`Tormentas: ${storms.length}`, 10, 120);
+        ctx.fillText(`Criaturas: ${creatures.filter(c => c.active).length}`, 10, 140);
     }
     
     function drawStars() {
@@ -288,5 +363,5 @@
     
     console.log('✅ Nebula Drifter cargado! Listo para jugar.');
     console.log('🎮 Controles: WASD para mover, flechas para rotar');
-    console.log('💎 Recolecta fragmentos, esquiva a las criaturas!');
+    console.log('💎 Recolecta fragmentos, esquiva criaturas y tormentas!');
 })();
